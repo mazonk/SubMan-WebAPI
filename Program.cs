@@ -28,8 +28,8 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader());
 });
 
-// builder.Services.AddScoped<SubmanRepository>();
-// builder.Services.AddScoped<UserRepository>();
+// builder.Services.AddScoped<SubscriptionRepository>();
+builder.Services.AddScoped<UserRepository>();
 
 // Add MongoDB connection service (singleton)
 builder.Services.AddSingleton<MongoDbContext>(sp =>
@@ -46,53 +46,53 @@ builder.Services.AddSwaggerGen(options =>
         Description = "A simple API to manage subscriptions"
     });
 
-    // // Enable XML comments
-    // var xmlFile = Path.Combine(AppContext.BaseDirectory, "subman.xml");
-    // options.IncludeXmlComments(xmlFile);
+    // Enable XML comments
+    var xmlFile = Path.Combine(AppContext.BaseDirectory, "SubscriptionManager.xml");
+    options.IncludeXmlComments(xmlFile);
 });
 
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//     .AddJwtBearer(options =>
-//     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuer = true,
-//             ValidateAudience = true,
-//             ValidateLifetime = true,
-//             ValidIssuer = "localhost",
-//             ValidAudience = "localhost",
-//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"]!))
-//         };
-//     });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = "localhost",
+            ValidAudience = "localhost",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"]!))
+        };
+    });
 
-// builder.Services.AddSwaggerGen(c =>
-// {
-//     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-//     {
-//         In = ParameterLocation.Header,
-//         Description = "Please insert JWT with Bearer into field",
-//         Name = "Authorization",
-//         Type = SecuritySchemeType.ApiKey,
-//         Scheme = "Bearer"
-//     });
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
 
-//     c.AddSecurityRequirement(new OpenApiSecurityRequirement
-//     {
-//         {
-//             new OpenApiSecurityScheme
-//             {
-//                 Reference = new OpenApiReference
-//                 {
-//                     Type = ReferenceType.SecurityScheme,
-//                     Id = "Bearer"
-//                 }
-//             },
-//             new string[] {}
-//         }
-//     });
-// });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
-// builder.Services.AddAuthorization();  // To use authorization
+builder.Services.AddAuthorization();  // To use authorization
 
 
 var app = builder.Build();
@@ -110,8 +110,8 @@ if (app.Environment.IsDevelopment()) {
         });
 }
 
-// app.UseAuthentication(); // Add authentication middleware
-// app.UseAuthorization();  // Add authorization middleware
+app.UseAuthentication(); // Add authentication middleware
+app.UseAuthorization();  // Add authorization middleware
 
 // Map controllers
 app.MapControllers();
