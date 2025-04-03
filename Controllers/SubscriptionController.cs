@@ -68,6 +68,7 @@ public class SubscriptionController : BaseController<Subscription> {
             if (existingSubscription == null)
                 return NotFound("Subscription not found");
             
+            subscription.Id = id; // update id for update operation
             await _subscriptionRepository.UpdateAsync(id, subscription);
             return NoContent();
         } catch (ValidationException ex) {
