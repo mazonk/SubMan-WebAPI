@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader());
 });
 
-// builder.Services.AddScoped<SubscriptionRepository>();
+builder.Services.AddScoped<SubscriptionRepository>();
 builder.Services.AddScoped<UserRepository>();
 
 // Add MongoDB connection service (singleton)
