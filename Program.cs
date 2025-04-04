@@ -109,20 +109,18 @@ var app = builder.Build();
 // Enable CORS
 app.UseCors("AllowAll");
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-        {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Subscription manager");
-            options.RoutePrefix = string.Empty;
-        });
-}
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Subscription manager");
+    options.RoutePrefix = string.Empty;
+});
 
-app.UseAuthentication(); // Add authentication middleware
-app.UseAuthorization();  // Add authorization middleware
+// Map root
+app.MapGet("/", () => Results.Ok("SubMan API is running 🚀"));
 
-// Map controllers
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
-
 app.Run();
