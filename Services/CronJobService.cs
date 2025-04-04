@@ -7,7 +7,7 @@ namespace Subman.Services
     {
         private readonly HttpClient _httpClient;
         private Timer? _timer;
-        private int _durationMinutes = 5;
+        private int _durationMinutes = 60;
         private const int MINUTES_DELTA = 1;
         private readonly string _url = "https://subman-webapi.onrender.com/swagger/index.html";
 

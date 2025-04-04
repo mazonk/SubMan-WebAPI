@@ -40,6 +40,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<SubscriptionRepository>();
 builder.Services.AddScoped<UserRepository>();
 
+builder.Services.AddSingleton<CronJobService>();
+
 // Add MongoDB connection service (singleton)
 builder.Services.AddSingleton<MongoDbContext>(sp =>
     new MongoDbContext(mongoDbConnectionString)
