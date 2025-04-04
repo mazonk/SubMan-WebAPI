@@ -1,25 +1,30 @@
-# Use official .NET 8 SDK image for building the app
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Base runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-
-# Copy project files and restore dependencies
-COPY *.csproj ./
-RUN dotnet restore
-
-# Copy everything else and build the app
-COPY . ./
-RUN dotnet publish -c Release -o /publish
-
-# Use runtime image for running the app
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
-WORKDIR /app
-COPY --from=build /publish .
-
-# Expose the port that the API runs on
 EXPOSE 8080
+EXPOSE 8081
 
-# Set environment variables (modify if needed)
-ENV ASPNETCORE_URLS=http://+:8080
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 
-# Run the application
+# Copy and restore
+COPY ["SubscriptionManager.csproj", "./"]
+RUN dotnet restore "SubscriptionManager.csproj"
+
+# Copy everything and build
+COPY . .
+COPY .env /app/.env
+
+WORKDIR "/src"
+RUN dotnet build "SubscriptionManager.csproj" -c Release -o /app/build
+
+# Publish stage
+FROM build AS publish
+RUN dotnet publish "SubscriptionManager.csproj" -c Release -o /app/publish
+
+# Final runtime image
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "SubscriptionManager.dll"]

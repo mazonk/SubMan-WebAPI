@@ -11,7 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Load env variables
 Env.Load();
-var mongoDbConnectionString = Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING")!;
+var mongoDbConnectionString = Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
+if (string.IsNullOrEmpty(mongoDbConnectionString))
+{
+    Console.WriteLine("MongoDB connection string is not set in environment variables.");
+}
+else
+{
+    Console.WriteLine("MongoDB connection string: " + mongoDbConnectionString);
+}
+
 
 // Add environment variables to the configuration
 builder.Configuration.AddEnvironmentVariables();
