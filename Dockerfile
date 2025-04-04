@@ -14,7 +14,6 @@ RUN dotnet restore "SubscriptionManager.csproj"
 
 # Copy everything and build
 COPY . .
-COPY .env /app/.env
 
 WORKDIR "/src"
 RUN dotnet build "SubscriptionManager.csproj" -c Release -o /app/build
