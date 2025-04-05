@@ -1,4 +1,3 @@
-using System.Timers;
 using System.Net.Http;
 
 namespace Subman.Services
@@ -21,9 +20,13 @@ namespace Subman.Services
             if (_timer != null && _timer.Enabled)
                 return;
 
-            _timer = new Timer(MINUTES_DELTA * 60 * 1000); // every MINUTES_DELTA minutes
-            _timer.Elapsed += async (sender, e) => await PingServer();
-            _timer.AutoReset = true;
+            // Set the interval to MINUTES_DELTA minutes in milliseconds
+            _timer = new System.Timers.Timer(MINUTES_DELTA * 60 * 1000); 
+
+            // Attach the Elapsed event handler
+            _timer.Elapsed += (sender, e) => Task.Run(async () => await PingServer());
+
+            _timer.AutoReset = true;  // Keep triggering periodically
             _timer.Start();
         }
 
