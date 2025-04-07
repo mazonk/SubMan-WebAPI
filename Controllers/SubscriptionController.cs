@@ -44,6 +44,7 @@ public class SubscriptionController : BaseController<Subscription> {
         }
     }
 
+    [HttpGet("user/{userId}")]
     public async Task<ActionResult<Subscription>> GetAllByUserId(string userId) {
         try {
                 if (!ObjectId.TryParse(userId, out _))
