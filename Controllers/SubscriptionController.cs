@@ -44,6 +44,19 @@ public class SubscriptionController : BaseController<Subscription> {
         }
     }
 
+    public async Task<ActionResult<Subscription>> GetAllByUserId(string userId) {
+        try {
+                if (!ObjectId.TryParse(userId, out _))
+                    return BadRequest("Invalid user id format");
+
+            var subscriptions = await _subscriptionRepository.GetAllByUserIdAsync(userId);
+            return subscriptions == null ? NotFound("Subscriptions not found") : Ok(subscriptions);
+        } catch (Exception ex) {
+            _logger.LogError(ex, $"Error fetching subscription for user with id {userId}");
+            return StatusCode(500, $"Couldn't fetch subscription for user with id {userId}");
+        }
+    }
+
     public override async Task<ActionResult<Subscription>> Create(Subscription subscription) {
         try {
             ValidateSubscription(subscription);
