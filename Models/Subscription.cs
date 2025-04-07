@@ -15,14 +15,17 @@ public class Subscription {
     [BsonElement("name")]
     public string Name { get; set; } = null!;
 
-    [BsonElement("comment")]
-    public string? Comment { get; set; }
+    [BsonElement("description")]
+    public string? Description { get; set; }
     
     [BsonElement("price")]
     public double Price { get; set; }
 
     [BsonElement("currency")]
     public string? Currency { get; set; }
+
+    [BsonElement("startDate")]
+    public DateTime StartDate { get; set; }
 
     [BsonElement("interval")]
     public int Interval { get; set; } // in days
