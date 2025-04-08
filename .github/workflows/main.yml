@@ -34,10 +34,14 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: ./API
+      env:
+        MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
     
     - name: Test
       run: dotnet test
       working-directory: ./Subman.Tests
+      env:
+        MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
 
     - name: Deploy to Render
       if: github.ref == 'refs/heads/main'
