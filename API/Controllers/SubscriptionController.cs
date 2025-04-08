@@ -8,6 +8,7 @@ using MongoDB.Bson;
 
 namespace Subman.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class SubscriptionController : BaseController<Subscription> {
@@ -84,7 +85,7 @@ public class SubscriptionController : BaseController<Subscription> {
             
             subscription.Id = id; // update id for update operation
             await _subscriptionRepository.UpdateAsync(id, subscription);
-            return NoContent();
+            return Ok(subscription);
         } catch (ValidationException ex) {
             return BadRequest(ex.Message);
         } catch (Exception ex) {

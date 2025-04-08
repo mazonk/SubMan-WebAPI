@@ -28,4 +28,18 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Couldn't get user with id {id}");
         }
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<User>> DeleteUser(string id) {
+        try {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+                return NotFound("User not found");
+            await _userRepository.DeleteAsync(id);
+            return NoContent();
+        } catch (Exception ex) {
+            _logger.LogError(ex, $"Error deleting user with id {id}");
+            return StatusCode(500, $"Couldn't delete user with id {id}");
+        }
+    }
 }

@@ -11,9 +11,20 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Load env variables
-Env.Load();
+var baseDir = AppContext.BaseDirectory;
+
+// Walk up until we find the `.env` file (in the project root)
+var root = Path.GetFullPath(Path.Combine(baseDir, "../../../../"));
+var envPath = Path.Combine(root, ".env");
+
+Console.WriteLine($"Loading environment variables from {envPath}");
+Env.Load(envPath);
+
+
 var mongoDbConnectionString = Environment.GetEnvironmentVariable("MONGO_CONNECTION_STRING");
 
+if (mongoDbConnectionString == null)
+    throw new Exception("MONGO_CONNECTION_STRING environment variable not found");
 
 // Add environment variables to the configuration
 builder.Configuration.AddEnvironmentVariables();
@@ -121,3 +132,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");
 app.Run();
+
+public partial class Program { }
