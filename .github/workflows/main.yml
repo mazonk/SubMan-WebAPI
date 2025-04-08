@@ -36,7 +36,7 @@ jobs:
       working-directory: ./API
     
     - name: Test
-      run: dotnet test --verbosity normal --logger trx
+      run: dotnet test
       working-directory: ./Subman.Tests
 
     - name: Deploy to Render
