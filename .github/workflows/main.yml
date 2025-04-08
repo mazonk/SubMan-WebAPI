@@ -29,12 +29,15 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
-
+      working-directory: ./API
+    
     - name: Build
       run: dotnet build --no-restore
-
+      working-directory: ./API
+    
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --logger trx
+      working-directory: ./Subman.Tests
 
     - name: Deploy to Render
       if: github.ref == 'refs/heads/main'
