@@ -31,7 +31,11 @@ public class SubscriptionController : BaseController<Subscription> {
             return StatusCode(500, "Error fetching subscriptions");
         }
     }
-
+/// <summary>
+/// Fetches a subscription by id.
+/// </summary>
+/// <param name="id"></param>
+/// <returns> A subscription.</returns>
     public override async Task<ActionResult<Subscription>> GetById(string id) {
         try {
             if (!ObjectId.TryParse(id, out _))
@@ -44,7 +48,11 @@ public class SubscriptionController : BaseController<Subscription> {
             return StatusCode(500, $"Couldn't fetch subscription with id {id}");
         }
     }
-
+/// <summary>
+/// Fetches all subscriptions for a user.
+/// </summary>
+/// <param name="userId"></param>
+/// <returns> A list of subscriptions.</returns>
     [HttpGet("user/{userId}")]
     public async Task<ActionResult<Subscription>> GetAllByUserId(string userId) {
         try {
@@ -58,7 +66,11 @@ public class SubscriptionController : BaseController<Subscription> {
             return StatusCode(500, $"Couldn't fetch subscription for user with id {userId}");
         }
     }
-
+/// <summary>
+/// Creates a new subscription.
+/// </summary>
+/// <param name="subscription"></param>
+/// <returns> A newly created subscription.</returns>
     public override async Task<ActionResult<Subscription>> Create(Subscription subscription) {
         try {
             ValidateSubscription(subscription);
@@ -72,7 +84,12 @@ public class SubscriptionController : BaseController<Subscription> {
             return StatusCode(500, "Error creating subscription");
         }
     }
-
+/// <summary>
+/// Updates an existing subscription.
+/// </summary>
+/// <param name="id"></param>
+/// <param name="subscription"></param>
+/// <returns> An updated subscription.</returns>
     public override async Task<ActionResult<Subscription>> Update(string id, Subscription subscription) {
         try {
             if (GetById(id) == null)
@@ -93,7 +110,11 @@ public class SubscriptionController : BaseController<Subscription> {
             return StatusCode(500, $"Couldn't update subscription with id {id}");
         }
     }
-
+/// <summary>
+/// Deletes a subscription.
+/// </summary>
+/// <param name="id"></param>
+/// <returns></returns>
     public override async Task<ActionResult<Subscription>> Delete(string id) {
         try {
             var existingSubscription = await _subscriptionRepository.GetByIdAsync(id);
@@ -107,7 +128,11 @@ public class SubscriptionController : BaseController<Subscription> {
             return StatusCode(500, $"Couldn't delete subscription with id {id}");
         }
     }
-
+/// <summary>
+/// Validates a subscription.
+/// </summary>
+/// <param name="subscription"></param>
+/// <exception cref="ValidationException"></exception>
     //validation
     private void ValidateSubscription(Subscription subscription)
     {
