@@ -15,7 +15,12 @@ public class UserController : ControllerBase
         _logger = logger;
         _userRepository = userRepository;
     }
-
+    
+/// <summary>
+    /// Gets a user by id.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns> A user.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUserById(string id) {
         try {
@@ -28,7 +33,11 @@ public class UserController : ControllerBase
             return StatusCode(500, $"Couldn't get user with id {id}");
         }
     }
-
+/// <summary>
+/// Deletes a user.
+/// </summary>
+/// <param name="id"></param>
+/// <returns></returns>
     [HttpDelete("{id}")]
     public async Task<ActionResult<User>> DeleteUser(string id) {
         try {
