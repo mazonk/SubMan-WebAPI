@@ -8,44 +8,43 @@ on:
 
 jobs:
   build-and-deploy:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Cache NuGet packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ./API
-    
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: ./API
-      env:
-        MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-    
-    - name: Test
-      run: dotnet test
-      working-directory: ./Subman.Tests
-      env:
-        MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ./API
 
-    - name: Deploy to Render
-      if: github.ref == 'refs/heads/main'
-      run: |
-        curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      - name: Build
+        run: dotnet build --no-restore
+        working-directory: ./API
+        env:
+          MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Test
+        run: dotnet test --logger "trx;LogFileName=test_results.trx" --verbosity normal
+        working-directory: ./Subman.Tests
+        env:
+          MONGO_CONNECTION_STRING: ${{ secrets.MONGO_CONNECTION_STRING }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: Deploy to Render
+        if: github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
