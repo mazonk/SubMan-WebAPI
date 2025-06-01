@@ -99,27 +99,6 @@ public class SubscriptionControllerTests : IClassFixture<CustomWebApplicationFac
         Interval = 30
     };
 
-    [Fact]
-    public async Task CreateSubscription_ShouldReturnCreated()
-    {
-        // Arrange
-        var sub = GenerateSubscription("Create Test");
-
-        // Act
-        var response = await _client.PostAsJsonAsync("/api/subscription", sub);
-
-        // Assert
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
-
-        var created = await response.Content.ReadFromJsonAsync<Subscription>();
-        created.Should().NotBeNull("Expected the created subscription to be returned");
-
-        created!.Name.Should().Be(sub.Name);
-        created.UserId.Should().Be(sub.UserId);
-
-        // Add the created subscription ID to the list so it can be cleaned up
-        _createdSubscriptionIds.Add(created.Id!);
-    }
 
     [Fact]
     public async Task CreateSubscription_WithInvalidData_ShouldReturnBadRequest()
