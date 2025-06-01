@@ -110,13 +110,14 @@ public class SubscriptionControllerTests : IClassFixture<CustomWebApplicationFac
 
         // Assert
         response.StatusCode.Should().Be(System.Net.HttpStatusCode.Created);
+
         var created = await response.Content.ReadFromJsonAsync<Subscription>();
         created.Should().NotBeNull("Expected the created subscription to be returned");
-        created.Should().NotBeNull();
+
         created!.Name.Should().Be(sub.Name);
         created.UserId.Should().Be(sub.UserId);
 
-        // Add the created subscription ID to the list - so it can be removed later
+        // Add the created subscription ID to the list so it can be cleaned up
         _createdSubscriptionIds.Add(created.Id!);
     }
 
