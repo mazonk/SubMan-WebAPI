@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load env variable
+// Load env variables
 var baseDir = AppContext.BaseDirectory;
 
 // Walk up until we find the `.env` file (in the project root)
